@@ -11,6 +11,7 @@ async function timeInterval(eventName,ms,fn) {
         }, ms);
     });
 }
+
 export function parseAbi(abiArray,{owner_address,contract_address}){
 
     let _this = this;
