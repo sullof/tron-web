@@ -5,13 +5,13 @@ export function bin2String(array) {
 }
 
 export function arrayEquals(array1, array2) {
-    if (array1.length != array2.length)
+    if (array1.length !== array2.length)
         return false;
         
     let i;
 
     for (i = 0; i < array1.length; i++) {
-        if (array1[i] != array2[i])
+        if (array1[i] !== array2[i])
             return false;
     }
 
@@ -56,7 +56,7 @@ export function bytesToString(arr) {
         const one = arr[i].toString(2);
         const v = one.match(/^1+?(?=0)/);
 
-        if (v && one.length == 8) {
+        if (v && one.length === 8) {
             const bytesLength = v[0].length;
             let store = arr[i].toString(2).slice(7 - bytesLength);
 
@@ -194,18 +194,18 @@ export function isNumber(c) {
 //return 3: assetName ------ String
 //return other: error
 export function getStringType(str) {
-    if (null == str)
+    if (null === str)
         return -1;
 
-    if (typeof (str) != 'string')
+    if (typeof (str) !== 'string')
         return -1;
 
-    if (str.length == 0 || str == "")
+    if (str.length === 0 || str === "")
         return -1;
 
     let i = 0;
 
-    if (str.length == 40) {
+    if (str.length === 40) {
         for (; i < 40; i++) {
             var c = str.charAt(i);
 
@@ -214,7 +214,7 @@ export function getStringType(str) {
         }
     }
 
-    if (i == 40)
+    if (i === 40)
         return 1; //40 Hex, Address
 
     for (i = 0; i < str.length; i++) {
@@ -224,7 +224,7 @@ export function getStringType(str) {
             break;
     }
 
-    if (i == str.length)
+    if (i === str.length)
         return 2; //Alll Decimal number, BlockNumber
 
     for (i = 0; i < str.length; i++) {

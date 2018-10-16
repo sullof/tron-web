@@ -21,17 +21,17 @@
  * @date 2017
  */
 
-var utils = require('../utils');
+import utils from '../utils';
 
-var f = require('./formatters');
+import f from './formatters';
 
-var SolidityTypeAddress = require('./types/address');
-var SolidityTypeBool = require('./types/bool');
-var SolidityTypeInt = require('./types/int');
-var SolidityTypeUInt = require('./types/uint');
-var SolidityTypeDynamicBytes = require('./types/dynamicbytes');
-var SolidityTypeString = require('./types/string');
-var SolidityTypeBytes = require('./types/bytes');
+import SolidityTypeAddress from './types/address';
+import SolidityTypeBool from './types/bool';
+import SolidityTypeInt from './types/int';
+import SolidityTypeUInt from './types/uint';
+import SolidityTypeDynamicBytes from './types/dynamicbytes';
+import SolidityTypeString from './types/string';
+import SolidityTypeBytes from './types/bytes';
 
 var isDynamic = function (solidityType, type) {
     return solidityType.isDynamicType(type) ||
@@ -404,4 +404,4 @@ var coder = new ABICoder([
     new SolidityTypeString()
 ]);
 
-module.exports = coder;
+export default coder;

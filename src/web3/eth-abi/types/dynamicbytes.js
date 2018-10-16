@@ -1,5 +1,5 @@
-var f = require('../formatters');
-var SolidityType = require('../type');
+import f from '../formatters';
+import SolidityType from '../type';
 
 var SolidityTypeDynamicBytes = function () {
     this._inputFormatter = f.formatInputDynamicBytes;
@@ -17,4 +17,4 @@ SolidityTypeDynamicBytes.prototype.isDynamicType = function () {
     return true;
 };
 
-module.exports = SolidityTypeDynamicBytes;
+export default SolidityTypeDynamicBytes;

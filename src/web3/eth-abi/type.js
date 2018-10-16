@@ -1,5 +1,5 @@
-var f = require('./formatters');
-var SolidityParam = require('./param');
+import f from './formatters';
+import SolidityParam from './param';
 
 /**
  * SolidityType prototype is used to encode/decode solidity params of certain type
@@ -252,4 +252,4 @@ SolidityType.prototype.decode = function (bytes, offset, name) {
     return this._outputFormatter(param, name);
 };
 
-module.exports = SolidityType;
+export default SolidityType;

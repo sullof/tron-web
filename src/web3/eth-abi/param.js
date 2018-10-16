@@ -20,7 +20,7 @@
  * @date 2015
  */
 
-var formatters = require('./formatters.js');
+import formatters from './formatters.js';
 
 /**
  * SolidityParam object prototype.
@@ -149,5 +149,5 @@ SolidityParam.encodeList = function (params) {
 
 
 
-module.exports = SolidityParam;
+export default SolidityParam;
 

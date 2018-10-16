@@ -6,7 +6,7 @@ import {
 } from './crypto';
 
 export function hexStringToBase58(sHexString) {
-    if (sHexString.length < 2 || (sHexString.length & 1) != 0)
+    if (sHexString.length < 2 || (sHexString.length & 1) !== 0)
         return '';
 
     const bytes = hexStr2byteArray(sHexString);
@@ -35,7 +35,7 @@ export function stringUtf8tHex(str) {
     let val = "";
 
     for (let i = 0; i < str.length; i++) {
-        if (val == "")
+        if (val === "")
             val = str.charCodeAt(i).toString(16);
         else
             val += str.charCodeAt(i).toString(16);
@@ -45,7 +45,7 @@ export function stringUtf8tHex(str) {
 }
 
 export function address2HexString(sHexAddress) {
-    if (sHexAddress.length == 42 && sHexAddress.indexOf('41') == 0)
+    if (sHexAddress.length === 42 && sHexAddress.indexOf('41') === 0)
         return sHexAddress;
 
     return base58ToHexString(sHexAddress)

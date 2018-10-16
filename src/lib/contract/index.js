@@ -2,7 +2,7 @@ import TronWeb from 'index';
 import utils from 'utils';
 import Method from './method';
 
-// import ethApi from '../../web3/eth-api';
+import ethApi from '../../web3/eth-abi';
 
 export default class Contract {
     constructor(tronWeb = false, abi = [], address = false) {
@@ -35,7 +35,7 @@ export default class Contract {
         const [ latestEvent ] = events.sort((a, b) => b.block - a.block);
         const newEvents = events.filter((event, index) => {
             const duplicate = events.slice(0, index).some(priorEvent => (
-                JSON.stringify(priorEvent) == JSON.stringify(event)
+                JSON.stringify(priorEvent) === JSON.stringify(event)
             ));
 
             if(duplicate)

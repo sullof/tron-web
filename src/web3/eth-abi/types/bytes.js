@@ -1,5 +1,5 @@
-var f = require('../formatters');
-var SolidityType = require('../type');
+import f from '../formatters';
+import SolidityType from '../type';
 
 /**
  * SolidityTypeBytes is a prototype that represents the bytes type.
@@ -26,4 +26,4 @@ SolidityTypeBytes.prototype.isType = function (name) {
     return !!name.match(/^bytes([0-9]{1,})(\[([0-9]*)\])*$/);
 };
 
-module.exports = SolidityTypeBytes;
+export default SolidityTypeBytes;

@@ -21,8 +21,8 @@
  * @date 2017
  */
 
-var utils = require('./utils');
-var Iban = require('./eth-iban');
+import utils from './utils';
+import Iban from './eth-iban';
 
 var inputAddressFormatter = function (address) {
     var iban = new Iban(address);
@@ -35,7 +35,7 @@ var inputAddressFormatter = function (address) {
 };
 
 
-module.exports = {
+export default {
     inputAddressFormatter
 }
 

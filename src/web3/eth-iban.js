@@ -23,8 +23,8 @@
  * @date 2015
  */
 
-var utils = require('./utils');
-var BigNumber = require('bn.js');
+import utils from './utils';
+import BigNumber from 'bn.js';
 
 
 // var leftPad = function (string, bytes) {
@@ -262,4 +262,4 @@ Iban.prototype.toString = function () {
     return this._iban;
 };
 
-module.exports = Iban;
+export default Iban;

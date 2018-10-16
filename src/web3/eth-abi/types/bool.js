@@ -1,5 +1,5 @@
-var f = require('../formatters');
-var SolidityType = require('../type');
+import f from '../formatters';
+import SolidityType from '../type';
 
 /**
  * SolidityTypeBool is a protoype that represents bool type
@@ -23,4 +23,4 @@ SolidityTypeBool.prototype.isType = function (name) {
     return !!name.match(/^bool(\[([0-9]*)\])*$/);
 };
 
-module.exports = SolidityTypeBool;
+export default SolidityTypeBool;

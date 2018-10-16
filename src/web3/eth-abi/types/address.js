@@ -1,6 +1,6 @@
-var f = require('../formatters');
-var formatters = require('../../core-helpers').formatters;
-var SolidityType = require('../type');
+import f from '../formatters';
+import {formatters} from '../../core-helpers';
+import SolidityType from '../type';
 
 /**
  * SolidityTypeAddress is a protoype that represents address type
@@ -28,4 +28,4 @@ SolidityTypeAddress.prototype.isType = function (name) {
     return !!name.match(/address(\[([0-9]*)\])?/);
 };
 
-module.exports = SolidityTypeAddress;
+export default SolidityTypeAddress;

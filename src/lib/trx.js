@@ -41,10 +41,10 @@ export default class Trx {
         if(block === false)
             return callback('No block identifier provided');
 
-        if(block == 'earliest')
+        if(block === 'earliest')
             block = 0;
 
-        if(block == 'latest')
+        if(block === 'latest')
             return this.getCurrentBlock(callback);
 
         if(isNaN(block) && utils.isHex(block))
@@ -209,7 +209,7 @@ export default class Trx {
         if(![ 'to', 'from', 'all' ].includes(direction))
             return callback('Invalid direction provided: Expected "to", "from" or "all"');
         
-        if(direction == 'all') {
+        if(direction === 'all') {
             try {
                 const from = await this.getTransactionsRelated(address, 'from', limit, offset);
                 const to = await this.getTransactionsRelated(address, 'to', limit, offset);
@@ -435,7 +435,7 @@ export default class Trx {
             return this.injectPromise(this.timeUntilNextVoteCycle);
 
         this.tronWeb.fullNode.request('wallet/getnextmaintenancetime').then(({ num = -1 }) => {
-            if(num == -1)
+            if(num === -1)
                 return callback('Failed to get time until next vote cycle');
 
             callback(null, Math.floor(num / 1000));

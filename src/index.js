@@ -58,7 +58,7 @@ export default class TronWeb extends EventEmitter {
     }
 
     setDefaultBlock(blockID = false) {
-        if(blockID === false || blockID == 'latest' || blockID == 'earliest' || blockID === 0)
+        if(blockID === false || blockID === 'latest' || blockID === 'earliest' || blockID === 0)
             return this.defaultBlock = blockID;
 
         if(!utils.isInteger(blockID) || !blockID)
@@ -302,12 +302,12 @@ export default class TronWeb extends EventEmitter {
     }
 
     static fromSun(sun) {
-        const trx = TronWeb.toBigNumber(sun).div(1_000_000);        
+        const trx = TronWeb.toBigNumber(sun).div(1_000_000);
         return utils.isBigNumber(sun) ? trx : trx.toString(10);
     }
 
     static toSun(trx) {
-        const sun = TronWeb.toBigNumber(trx).times(1_000_000);        
+        const sun = TronWeb.toBigNumber(trx).times(1_000_000);
         return utils.isBigNumber(trx) ? sun : sun.toString(10);
     }
 

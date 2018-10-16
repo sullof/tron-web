@@ -22,8 +22,8 @@
  */
 
 
-var utils = require('../utils');
-var TronWeb = require('..');
+import utils from '../utils';
+import BigNumber from "bignumber.js";
 
 var isAddress = function (address) {
     // check if it has the basic requirements of an address
@@ -86,7 +86,7 @@ var _jsonInterfaceMethodToString = function (json) {
  * @return {String}
  */
 var toTwosComplement = function (number) {
-    return '0x'+ TronWeb.toBigNumber(number).toTwos(256).toString(16, 64);
+    return '0x'+ toBigNumber(number).toTwos(256).toString(16, 64);
 };
 
 
@@ -113,8 +113,26 @@ var rightPad = function (string, chars, sign) {
     return (hasPrefix ? '0x' : '') + string + (new Array(padding).join(sign ? sign : "0"));
 };
 
+function fromUtf8 (string) {
+    return '0x' + Buffer.from(string, 'utf8').toString('hex');
+}
 
-module.exports = {
+function toUtf8(hex) {
+    hex = hex.replace(/^0x/,'');
+    return Buffer.from(hex, 'hex').toString('utf8');
+}
+
+function toBigNumber(amount = 0) {
+    if(utils.isBigNumber(amount))
+        return amount;
+
+    if(utils.isString(amount) && (amount.indexOf('0x') === 0 || amount.indexOf('-0x') === 0))
+        return new BigNumber(amount.replace('0x', ''), 16);
+
+    return new BigNumber(amount.toString(10), 10);
+}
+
+export default {
     _jsonInterfaceMethodToString,
     isAddress,
     isNumber: utils.isNumber,
@@ -122,11 +140,12 @@ module.exports = {
     sha3: utils.sha3,
     isString: utils.isString,
     isArray: utils.isArray,
+    isBigNumber: utils.isBigNumber,
     toTwosComplement,
     isHexStrict,
     rightPad,
     padRight: rightPad,
-    utf8ToHex: TronWeb.fromUtf8,
-    hexToUtf8: TronWeb.toUtf8
+    utf8ToHex: fromUtf8,
+    hexToUtf8: toUtf8
 }
 

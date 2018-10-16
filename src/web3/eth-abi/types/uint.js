@@ -1,5 +1,5 @@
-var f = require('../formatters');
-var SolidityType = require('../type');
+import f from '../formatters';
+import SolidityType from '../type';
 
 /**
  * SolidityTypeUInt is a protoype that represents uint type
@@ -29,4 +29,4 @@ SolidityTypeUInt.prototype.isType = function (name) {
     return !!name.match(/^uint([0-9]*)?(\[([0-9]*)\])*$/);
 };
 
-module.exports = SolidityTypeUInt;
+export default SolidityTypeUInt;

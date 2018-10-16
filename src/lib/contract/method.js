@@ -16,7 +16,7 @@ const decodeOutput = (abi, output) => {
     const types = abi.map(({ type }) => type);
 
     return abiCoder.decode(types, output).reduce((obj, arg, index) => {
-        if(types[index] == 'address')
+        if(types[index] === 'address')
             arg = '41' + arg.substr(2).toLowerCase();
 
         if(names.length)
@@ -54,7 +54,7 @@ export default class Method {
         const types = getParamTypes(this.inputs);
 
         args.forEach((arg, index) => {
-            if(types[index] == 'address')
+            if(types[index] === 'address')
                 args[index] = this.tronWeb.address.toHex(arg).replace(/^(41)/, '0x')
         });
 
@@ -195,7 +195,7 @@ export default class Method {
                 return callback(null, signedTransaction.txID);
 
             const checkResult = async (index = 0) => {
-                if(index == 20) {
+                if(index === 20) {
                     return callback({ 
                         error: 'Cannot find result in solidity node', 
                         transaction: signedTransaction
@@ -210,7 +210,7 @@ export default class Method {
                     }, 3000);
                 }
 
-                if(output.result && output.result == 'FAILED') {
+                if(output.result && output.result === 'FAILED') {
                     return callback({
                         error: this.tronWeb.toUtf8(output.resMessage),
                         transaction: signedTransaction,
@@ -263,7 +263,7 @@ export default class Method {
                 const [ latestEvent ] = events.sort((a, b) => b.block - a.block);
                 const newEvents = events.filter((event, index) => {
                     const duplicate = events.slice(0, index).some(priorEvent => (
-                        JSON.stringify(priorEvent) == JSON.stringify(event)
+                        JSON.stringify(priorEvent) === JSON.stringify(event)
                     ));
 
                     if(duplicate)

@@ -20,7 +20,7 @@ export function getBase58CheckAddress(addressBytes) {
 }
 
 export function decodeBase58Address(base58Sting) {
-    if (typeof (base58Sting) != 'string')
+    if (typeof (base58Sting) !== 'string')
         return false;
 
     if (base58Sting.length <= 4)
@@ -41,8 +41,8 @@ export function decodeBase58Address(base58Sting) {
     const hash1 = SHA256(hash0);
     const checkSum1 = hash1.slice(0, 4);
 
-    if (checkSum[0] == checkSum1[0] && checkSum[1] == checkSum1[1] && checkSum[2] ==
-        checkSum1[2] && checkSum[3] == checkSum1[3]
+    if (checkSum[0] === checkSum1[0] && checkSum[1] === checkSum1[1] && checkSum[2] ==
+        checkSum1[2] && checkSum[3] === checkSum1[3]
     ) {
         return address;
     }
@@ -154,8 +154,8 @@ export function isAddressValid(base58Str) {
     const hash1 = SHA256(hash0);
     const checkSum1 = hash1.slice(0, 4);
 
-    if (checkSum[0] == checkSum1[0] && checkSum[1] == checkSum1[1] && checkSum[2] ==
-        checkSum1[2] && checkSum[3] == checkSum1[3]
+    if (checkSum[0] === checkSum1[0] && checkSum[1] === checkSum1[1] && checkSum[2] ==
+        checkSum1[2] && checkSum[3] === checkSum1[3]
     ) {
         return true
     }

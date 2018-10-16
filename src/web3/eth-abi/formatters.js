@@ -21,9 +21,9 @@
  * @date 2017
  */
 
-var utils = require('../utils');
-var BN = require('bn.js');
-var SolidityParam = require('./param');
+import utils from '../utils';
+import BN from 'bn.js';
+import SolidityParam from './param';
 
 
 
@@ -270,7 +270,7 @@ var formatOutputAddress = function (param, name) {
     return utils.toChecksumAddress("0x" + value.slice(value.length - 40, value.length));
 };
 
-module.exports = {
+export default {
     formatInputInt: formatInputInt,
     formatInputBytes: formatInputBytes,
     formatInputDynamicBytes: formatInputDynamicBytes,

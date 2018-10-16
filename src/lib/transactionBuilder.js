@@ -318,7 +318,7 @@ export default class TransactionBuilder {
 
 
         const payable = abi.some(func => {
-            return func.type == 'constructor' && func.payable;
+            return func.type === 'constructor' && func.payable;
         });
 
         if(!utils.isHex(bytecode))
@@ -330,7 +330,7 @@ export default class TransactionBuilder {
         if(!utils.isInteger(callValue) || callValue < 0)
             return callback('Invalid options.callValue provided');
 
-        if(payable && callValue == 0)
+        if(payable && callValue === 0)
             return callback('When contract is payable, options.callValue must be a positive integer');
 
         if(!payable && callValue > 0)
@@ -357,7 +357,7 @@ export default class TransactionBuilder {
             const values = [];
             constructorParams = constructorParams.inputs;
 
-            if(parameters.length != constructorParams.length)
+            if(parameters.length !== constructorParams.length)
                 return callback(`constructor needs ${constructorParams.length} but ${parameters.length} provided`);
 
             for(let i = 0; i < parameters.length; i++) {
@@ -367,7 +367,7 @@ export default class TransactionBuilder {
                 if(!type || !utils.isString(type) || !type.length)
                     return callback('Invalid parameter type provided: ' + type);
 
-                if(type == 'address')
+                if(type === 'address')
                     value = this.tronWeb.address.toHex(value).replace(/^(41)/, '0x');
                     
                 types.push(type);
@@ -469,7 +469,7 @@ export default class TransactionBuilder {
                 if(!type || !utils.isString(type) || !type.length)
                     return callback('Invalid parameter type provided: ' + type);
 
-                if(type == 'address')
+                if(type === 'address')
                     value = this.tronWeb.address.toHex(value).replace(/^(41)/, '0x');
                     
                 types.push(type);

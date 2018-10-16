@@ -100,7 +100,7 @@ const utils = {
         if (this.isObject(event.result)) {
             for (var i = 0; i < abi.length; i++) {
                 let obj = abi[i];
-                if (obj.type == 'address' && obj.name in event.result)
+                if (obj.type === 'address' && obj.name in event.result)
                     event.result[obj.name] = '41' + event.result[obj.name].substr(2).toLowerCase();
             }
         } else if (this.isArray(event.result)) {
@@ -110,7 +110,7 @@ const utils = {
                     type
                 } = abi[index];
 
-                if(type == 'address')
+                if(type === 'address')
                     result = '41' + result.substr(2).toLowerCase();
 
                 obj[name] = result;
