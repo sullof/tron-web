@@ -2,6 +2,8 @@ import TronWeb from 'index';
 import utils from 'utils';
 import Method from './method';
 
+// import ethApi from '../../web3/eth-api';
+
 export default class Contract {
     constructor(tronWeb = false, abi = [], address = false) {
         if(!tronWeb || !tronWeb instanceof TronWeb)
