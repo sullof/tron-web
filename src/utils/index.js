@@ -67,22 +67,6 @@ const utils = {
         }).includes(false);
     },
 
-    injectPromise(func, ...args) {
-        return new Promise((resolve, reject) => {
-            func(...args, (err, res) => {
-                if(err)
-                    reject(err);
-                else resolve(res);
-            });
-        });
-    },
-
-    promiseInjector(scope) {
-        return (func, ...args) => {
-            return this.injectPromise(func.bind(scope), ...args);
-        }
-    },
-
     mapEvent(event) {
         return {
             block: event.block_number,

@@ -1,4 +1,5 @@
 import utils from 'utils';
+import Promiseable from 'utils/Promiseable';
 
 const getFunctionSelector = abi => {
     return abi.name + '(' + getParamTypes(abi.inputs || []).join(',') + ')';
@@ -15,8 +16,9 @@ const decodeOutput = (abi, output) => {
     return utils.abi.decodeParams(names, types, output);
 };
 
-export default class Method {
+export default class Method extends Promiseable{
     constructor(contract, abi) {
+        super();
         this.tronWeb = contract.tronWeb;
         this.contract = contract;
 
@@ -28,8 +30,6 @@ export default class Method {
 
         this.functionSelector = getFunctionSelector(abi);
         this.signature = this.tronWeb.sha3(this.functionSelector, false).slice(0, 8);
-        this.injectPromise = utils.promiseInjector(this);
-
         this.defaultOptions = {
             feeLimit: 1000000000,
             callValue: 0,
@@ -68,9 +68,8 @@ export default class Method {
             callback = options;
             options = {};
         }
-
         if (!callback)
-            return this.injectPromise(this._call, types, args, options);
+            return this.injectPromise(this._call, arguments);
 
         if (types.length !== args.length)
             return callback('Invalid argument count provided');
@@ -132,7 +131,7 @@ export default class Method {
         }
 
         if (!callback)
-            return this.injectPromise(this._send, types, args, options, privateKey);
+            return this.injectPromise(this._send, arguments);
 
         if (types.length !== args.length)
             throw new Error('Invalid argument count provided');

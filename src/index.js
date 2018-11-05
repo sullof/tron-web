@@ -3,6 +3,7 @@ import utils from 'utils';
 import axios from 'axios';
 import BigNumber from 'bignumber.js';
 import EventEmitter from 'eventemitter3';
+import Promiseable from 'utils/Promiseable';
 
 import TransactionBuilder from 'lib/transactionBuilder';
 import Trx from 'lib/trx';
@@ -55,7 +56,7 @@ export default class TronWeb extends EventEmitter {
         this.witness = new Witness(this);
         this.utils = utils;
 
-        this.injectPromise = utils.promiseInjector(this);
+        this.injectPromise = Promiseable.promiseInjector(this);
     }
 
     setDefaultBlock(blockID = false) {
@@ -159,7 +160,7 @@ export default class TronWeb extends EventEmitter {
 
     getEventResult(contractAddress = false, sinceTimestamp = 0, eventName = false, blockNumber = false, callback = false) {
         if(!callback)
-            return this.injectPromise(this.getEventResult, contractAddress, sinceTimestamp, eventName, blockNumber);
+            return this.injectPromise(this.getEventResult, arguments);
 
         if(!this.eventServer)
             callback('No event server configured');
@@ -199,7 +200,7 @@ export default class TronWeb extends EventEmitter {
 
     getEventByTransacionID(transactionID = false, callback = false) {
         if(!callback)
-            return this.injectPromise(this.getEventByTransacionID, transactionID);
+            return this.injectPromise(this.getEventByTransacionID, arguments);
 
         if(!this.eventServer)
             callback('No event server configured');
@@ -353,7 +354,7 @@ export default class TronWeb extends EventEmitter {
 
     async isConnected(callback = false) {
         if(!callback)
-            return this.injectPromise(this.isConnected);
+            return this.injectPromise(this.isConnected, arguments);
 
         callback(null, {
             fullNode: await this.fullNode.isConnected(),

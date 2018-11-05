@@ -1,14 +1,15 @@
 import TronWeb from 'index';
 import utils from 'utils';
 import Method from './method';
+import Promiseable from 'utils/Promiseable';
 
-export default class Contract {
+export default class Contract extends Promiseable{
     constructor(tronWeb = false, abi = [], address = false) {
+        super();
         if(!tronWeb || !tronWeb instanceof TronWeb)
             throw new Error('Expected instance of TronWeb');
 
         this.tronWeb = tronWeb;
-        this.injectPromise = utils.promiseInjector(this);
 
         this.address = address;
         this.abi = abi;
@@ -164,7 +165,7 @@ export default class Contract {
         }
 
         if(!callback)
-            return this.injectPromise(this.new, options, privateKey);
+            return this.injectPromise(this.new, arguments);
 
         try {
             const address = this.tronWeb.address.fromPrivateKey(privateKey);
@@ -183,7 +184,7 @@ export default class Contract {
 
     async at(contractAddress, callback = false) {
         if(!callback)
-            return this.injectPromise(this.at, contractAddress);
+            return this.injectPromise(this.at, arguments);
 
         try {
             const contract = await this.tronWeb.trx.getContract(contractAddress);

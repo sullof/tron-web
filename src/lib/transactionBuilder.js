@@ -1,14 +1,15 @@
 import TronWeb from 'index';
 import utils from 'utils';
 import * as Ethers from 'ethers';
+import Promiseable from 'utils/Promiseable';
 
-export default class TransactionBuilder {
+export default class TransactionBuilder extends Promiseable {
     constructor(tronWeb = false) {
+        super();
         if(!tronWeb || !tronWeb instanceof TronWeb)
             throw new Error('Expected instance of TronWeb');
 
         this.tronWeb = tronWeb;
-        this.injectPromise = utils.promiseInjector(this);
     }
 
     sendTrx(to = false, amount = 0, from = this.tronWeb.defaultAddress.hex, callback = false) {
@@ -18,7 +19,7 @@ export default class TransactionBuilder {
         }
         
         if(!callback)
-            return this.injectPromise(this.sendTrx, to, amount, from);
+            return this.injectPromise(this.sendTrx, arguments);
 
         if(!this.tronWeb.isAddress(to))
             return callback('Invalid recipient address provided');
@@ -54,7 +55,7 @@ export default class TransactionBuilder {
         }
         
         if(!callback)
-            return this.injectPromise(this.sendToken, to, amount, tokenID, from);
+            return this.injectPromise(this.sendToken, arguments);
 
         if(!this.tronWeb.isAddress(to))
             return callback('Invalid recipient address provided');
@@ -95,7 +96,7 @@ export default class TransactionBuilder {
         }
         
         if(!callback)
-            return this.injectPromise(this.purchaseToken, issuerAddress, tokenID, amount, buyer);
+            return this.injectPromise(this.purchaseToken, arguments);
 
         if(!this.tronWeb.isAddress(issuerAddress))
             return callback('Invalid issuer address provided');
@@ -134,7 +135,7 @@ export default class TransactionBuilder {
         }
             
         if(!callback)
-            return this.injectPromise(this.freezeBalance, address, amount, duration, resource);
+            return this.injectPromise(this.freezeBalance, arguments);
 
         if(!this.tronWeb.isAddress(address))
             return callback('Invalid address provided');
@@ -170,7 +171,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.unfreezeBalance, address, resource);
+            return this.injectPromise(this.unfreezeBalance, arguments);
 
         if(!this.tronWeb.isAddress(address))
             return callback('Invalid address provided');
@@ -193,7 +194,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.withdrawBlockRewards, address);
+            return this.injectPromise(this.withdrawBlockRewards, arguments);
 
         if(!this.tronWeb.isAddress(address))
             return callback('Invalid address provided');
@@ -216,7 +217,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.applyForSR, address, url);
+            return this.injectPromise(this.applyForSR, arguments);
 
         if(!this.tronWeb.isAddress(address))
             return callback('Invalid address provided');
@@ -242,7 +243,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.vote, votes, voterAddress);
+            return this.injectPromise(this.vote, arguments);
 
         if(!utils.isObject(votes) || !Object.keys(votes).length)
             return callback('Invalid votes object provided');
@@ -293,7 +294,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.createSmartContract, options, issuerAddress);
+            return this.injectPromise(this.createSmartContract, arguments);
 
         let {
             abi = false,
@@ -429,15 +430,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback) {
-            return this.injectPromise(
-                this.triggerSmartContract, 
-                contractAddress, 
-                functionSelector, 
-                feeLimit,
-                callValue, 
-                parameters,
-                issuerAddress
-            );
+            return this.injectPromise(this.triggerSmartContract, arguments);
         }
 
         if(!this.tronWeb.isAddress(contractAddress))
@@ -516,7 +509,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.createToken, options, issuerAddress);
+            return this.injectPromise(this.createToken, arguments);
 
         const {
             name = false,
@@ -615,7 +608,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback) {
-            return this.injectPromise(this.updateAccount, accountName, address);
+            return this.injectPromise(this.updateAccount, arguments);
         }
 
         if (!utils.isString(accountName) || !accountName.length) {
@@ -645,7 +638,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.updateToken, options, issuerAddress);
+            return this.injectPromise(this.updateToken, arguments);
 
         const {
             description = false,
@@ -713,7 +706,7 @@ export default class TransactionBuilder {
             return callback('Invalid proposal parameters provided');
 
         if(!callback)
-            return this.injectPromise(this.createProposal, parameters, issuerAddress);
+            return this.injectPromise(this.createProposal, arguments);
 
         if(!this.tronWeb.isAddress(issuerAddress))
             return callback('Invalid issuerAddress provided');
@@ -749,7 +742,7 @@ export default class TransactionBuilder {
         }
         
         if(!callback)
-            return this.injectPromise(this.deleteProposal, proposalID, issuerAddress);
+            return this.injectPromise(this.deleteProposal, arguments);
 
         if(!this.tronWeb.isAddress(issuerAddress))
             return callback('Invalid issuerAddress provided');
@@ -785,7 +778,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.voteProposal, proposalID, hasApproval, voterAddress);
+            return this.injectPromise(this.voteProposal, arguments);
 
         if(!this.tronWeb.isAddress(voterAddress))
             return callback('Invalid voterAddress address provided');
@@ -824,7 +817,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.injectExchangeTokens, exchangeID, tokenName, tokenAmount, ownerAddress);
+            return this.injectPromise(this.injectExchangeTokens, arguments);
 
         if(!this.tronWeb.isAddress(ownerAddress))
             return callback('Invalid ownerAddress provided');
@@ -867,7 +860,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.withdrawExchangeTokens, exchangeID, tokenName, tokenAmount, ownerAddress);
+            return this.injectPromise(this.withdrawExchangeTokens, arguments);
 
         if(!this.tronWeb.isAddress(ownerAddress))
             return callback('Invalid ownerAddress provided');
@@ -915,7 +908,7 @@ export default class TransactionBuilder {
         }
 
         if(!callback)
-            return this.injectPromise(this.tradeExchangeTokens, exchangeID, tokenName, tokenAmountSold, tokenAmountExpected, ownerAddress);
+            return this.injectPromise(this.tradeExchangeTokens, arguments);
 
         if(!this.tronWeb.isAddress(ownerAddress))
             return callback('Invalid ownerAddress provided');
