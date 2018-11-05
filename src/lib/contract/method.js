@@ -1,5 +1,5 @@
 import utils from 'utils';
-import Promiseable from 'utils/Promiseable';
+import Promisable from 'utils/Promisable';
 
 const getFunctionSelector = abi => {
     return abi.name + '(' + getParamTypes(abi.inputs || []).join(',') + ')';
@@ -16,7 +16,7 @@ const decodeOutput = (abi, output) => {
     return utils.abi.decodeParams(names, types, output);
 };
 
-export default class Method extends Promiseable{
+export default class Method extends Promisable{
     constructor(contract, abi) {
         super();
         this.tronWeb = contract.tronWeb;

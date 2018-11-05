@@ -3,7 +3,7 @@ import utils from 'utils';
 import axios from 'axios';
 import BigNumber from 'bignumber.js';
 import EventEmitter from 'eventemitter3';
-import Promiseable from 'utils/Promiseable';
+import Promisable from 'utils/Promisable';
 
 import TransactionBuilder from 'lib/transactionBuilder';
 import Trx from 'lib/trx';
@@ -57,7 +57,7 @@ export default class TronWeb extends EventEmitter {
         this.trx = new Trx(this);
         this.utils = utils;
 
-        this.injectPromise = Promiseable.promiseInjector(this);
+        this.injectPromise = Promisable.promiseInjector(this);
     }
 
     setDefaultBlock(blockID = false) {

@@ -1,9 +1,9 @@
 import TronWeb from 'index';
 import utils from 'utils';
 import * as Ethers from 'ethers';
-import Promiseable from 'utils/Promiseable';
+import Promisable from 'utils/Promisable';
 
-export default class TransactionBuilder extends Promiseable {
+export default class TransactionBuilder extends Promisable {
     constructor(tronWeb = false) {
         super();
         if(!tronWeb || !tronWeb instanceof TronWeb)

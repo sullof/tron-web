@@ -1,12 +1,12 @@
 import TronWeb from 'index';
 import utils from 'utils';
 import * as Ethers from 'ethers';
-import Promiseable from 'utils/Promiseable';
+import Promisable from 'utils/Promisable';
 
 const TRX_MESSAGE_HEADER = '\x19TRON Signed Message:\n32';
 const ETH_MESSAGE_HEADER = '\x19Ethereum Signed Message:\n32';
 
-export default class Trx extends Promiseable{
+export default class Trx extends Promisable{
     constructor(tronWeb = false) {
         super();
         if(!tronWeb || !tronWeb instanceof TronWeb)

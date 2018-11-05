@@ -1,9 +1,9 @@
 import TronWeb from 'index';
 import utils from 'utils';
 import Method from './method';
-import Promiseable from 'utils/Promiseable';
+import Promisable from 'utils/Promisable';
 
-export default class Contract extends Promiseable{
+export default class Contract extends Promisable{
     constructor(tronWeb = false, abi = [], address = false) {
         super();
         if(!tronWeb || !tronWeb instanceof TronWeb)

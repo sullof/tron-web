@@ -1,7 +1,7 @@
-export default class Promiseable {
+export default class Promisable {
 
     constructor() {
-        this.injectPromise = Promiseable.promiseInjector(this);
+        this.injectPromise = Promisable.promiseInjector(this);
     }
 
 
@@ -24,7 +24,7 @@ export default class Promiseable {
                     break;
                 args.push(preArgs[i.toString()]);
             }
-            return Promiseable.injectPromiseStatic(func.bind(scope), ...args);
+            return Promisable.injectPromiseStatic(func.bind(scope), ...args);
         }
     }
 }
