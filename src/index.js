@@ -7,7 +7,6 @@ import Promiseable from 'utils/Promiseable';
 
 import TransactionBuilder from 'lib/transactionBuilder';
 import Trx from 'lib/trx';
-import Witness from 'lib/witness';
 import Contract from 'lib/contract';
 
 import { keccak256 } from 'js-sha3';
@@ -24,6 +23,9 @@ export default class TronWeb extends EventEmitter {
 
         if(utils.isString(solidityNode))
             solidityNode = new providers.HttpProvider(solidityNode);
+
+        if(utils.isString(eventServer))
+            eventServer = new providers.HttpProvider(eventServer);
 
         this.setFullNode(fullNode);
         this.setSolidityNode(solidityNode);
@@ -42,8 +44,8 @@ export default class TronWeb extends EventEmitter {
         [
             'sha3', 'toHex', 'toUtf8', 'fromUtf8',
             'toAscii', 'fromAscii', 'toDecimal', 'fromDecimal',
-            'toSun', 'fromSun', 'toBigNumber', 'isAddress',
-            'compile', 'createAccount', 'address'
+            'toSun', 'fromSun', 'toBigNumber', 'isAddress', 
+            'createAccount', 'address'
         ].forEach(key => {
             this[key] = TronWeb[key];
         });
@@ -53,15 +55,15 @@ export default class TronWeb extends EventEmitter {
 
         this.transactionBuilder = new TransactionBuilder(this);
         this.trx = new Trx(this);
-        this.witness = new Witness(this);
         this.utils = utils;
 
         this.injectPromise = Promiseable.promiseInjector(this);
     }
 
     setDefaultBlock(blockID = false) {
-        if(blockID === false || blockID == 'latest' || blockID == 'earliest' || blockID === 0)
+        if([ false, 'latest', 'earliest', 0 ].includes(blockID)) {
             return this.defaultBlock = blockID;
+        }
 
         if(!utils.isInteger(blockID) || !blockID)
             throw new Error('Invalid block ID provided');
@@ -104,19 +106,6 @@ export default class TronWeb extends EventEmitter {
         return Object.values(providers).some(knownProvider => provider instanceof knownProvider);
     }
 
-    isEventServerConnected() {
-        if (!this.eventServer)
-            return false;
-
-        return axios.get(this.eventServer.replace(/\/+$/,'') + '/healthcheck').then(() => {
-            return true;
-        }).catch(() => {
-            return axios.get(this.eventServer.replace(/\/+$/,'') + '/events?size=1').then(({data}) => {
-                return Array.isArray(data);
-            }).catch(() => false);
-        });
-    }
-
     setFullNode(fullNode) {
         if(utils.isString(fullNode))
             fullNode = new providers.HttpProvider(fullNode);
@@ -140,10 +129,21 @@ export default class TronWeb extends EventEmitter {
     }
 
     setEventServer(eventServer = false) {
-        if(eventServer !== false && !utils.isValidURL(eventServer))
-            throw new Error('Invalid URL provided for event server');
+        if(!eventServer)
+            return this.eventServer = false;
+
+        if(utils.isString(eventServer))
+            eventServer = new providers.HttpProvider(eventServer);
+            
+        if(!this.isValidProvider(eventServer))
+            throw new Error('Invalid event server provided');
 
         this.eventServer = eventServer;
+        this.eventServer.isConnected = () => this.eventServer.request('healthcheck').then(() => true).catch(() => (
+            this.eventServer.request('events?size=1').then(data => (
+                Array.isArray(data)
+            ))
+        )).catch(() => false);
     }
 
     currentProviders() {
@@ -185,7 +185,7 @@ export default class TronWeb extends EventEmitter {
         if(blockNumber)
             routeParams.push(blockNumber);
 
-        return axios(`${this.eventServer}/event/contract/${routeParams.join('/')}?since=${sinceTimestamp}`).then(({ data = false }) => {
+        return this.eventServer.request(`event/contract/${routeParams.join('/')}?since=${sinceTimestamp}`).then((data = false) => {
             if(!data)
                 return callback('Unknown error occurred');
 
@@ -198,14 +198,14 @@ export default class TronWeb extends EventEmitter {
         }).catch(err => callback((err.response && err.response.data) || err)); 
     }
 
-    getEventByTransacionID(transactionID = false, callback = false) {
+    getEventByTransactionID(transactionID = false, callback = false) {
         if(!callback)
             return this.injectPromise(this.getEventByTransacionID, arguments);
 
         if(!this.eventServer)
             callback('No event server configured');
 
-        return axios(`${this.eventServer}/event/transaction/${transactionID}`).then(({ data = false }) => {
+        return this.eventServer.request(`event/transaction/${transactionID}`).then((data = false) => {
             if(!data)
                 return callback('Unknown error occurred');
 
@@ -338,11 +338,6 @@ export default class TronWeb extends EventEmitter {
         return utils.crypto.isAddressValid(address);
     }
 
-    // TODO
-    static compile(solditySource) {
-
-    }
-
     static async createAccount(callback = false) {
         const account = utils.accounts.generateAccount();
 
@@ -359,7 +354,7 @@ export default class TronWeb extends EventEmitter {
         callback(null, {
             fullNode: await this.fullNode.isConnected(),
             solidityNode: await this.solidityNode.isConnected(),
-            eventServer: await this.isEventServerConnected()
+            eventServer: this.eventServer && await this.eventServer.isConnected()
         });
     }
 };

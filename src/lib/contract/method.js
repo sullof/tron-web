@@ -6,12 +6,12 @@ const getFunctionSelector = abi => {
 }
 
 const getParamTypes = params => {
-    return params.map(({type}) => type);
+    return params.map(({ type }) => type);
 }
 
 const decodeOutput = (abi, output) => {
-    const names = abi.map(({name}) => name).filter(name => !!name);
-    const types = abi.map(({type}) => type);
+    const names = abi.map(({ name }) => name).filter(name => !!name);
+    const types = abi.map(({ type }) => type);
 
     return utils.abi.decodeParams(names, types, output);
 };
@@ -85,7 +85,7 @@ export default class Method extends Promiseable{
         if (!['pure', 'view'].includes(stateMutability.toLowerCase()))
             return callback(`Methods with state mutability "${stateMutability}" must use send()`);
 
-        options = {...this.defaultOptions, ...options};
+        options = { ...this.defaultOptions, ...options };
 
         const parameters = args.map((value, index) => ({
             type: types[index],
@@ -176,11 +176,10 @@ export default class Method extends Promiseable{
             const signedTransaction = await this.tronWeb.trx.sign(transaction.transaction, privateKey);
 
             if (!signedTransaction.signature) {
-                if (!privateKey) {
+                if (!privateKey)
                     return callback('Transaction was not signed properly');
-                } else {
-                    return callback('Invalid private key provided');
-                }
+                
+                return callback('Invalid private key provided');
             }
 
             const broadcast = await this.tronWeb.trx.sendRawTransaction(signedTransaction);
@@ -262,7 +261,7 @@ export default class Method extends Promiseable{
         const getEvents = async () => {
             try {
                 const events = await this.tronWeb.getEventResult(this.contract.address, sinceTimestamp, this.name);
-                const [latestEvent] = events.sort((a, b) => b.block - a.block);
+                const [ latestEvent ] = events.sort((a, b) => b.block - a.block);
                 const newEvents = events.filter((event, index) => {
 
                     if (options.resourceNode && !RegExp(options.resourceNode, 'i').test(event.resourceNode))

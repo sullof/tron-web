@@ -123,7 +123,13 @@ export default class TransactionBuilder extends Promiseable {
         }).catch(err => callback(err));
     }
 
-    freezeBalance(address = this.tronWeb.defaultAddress.hex, amount = 0, duration = 3, resource = "BANDWIDTH", callback = false) {
+    freezeBalance(amount = 0, duration = 3, resource = "BANDWIDTH", address = this.tronWeb.defaultAddress.hex, callback = false)
+    {
+        if(utils.isFunction(address)) {
+            callback = address;
+            address = this.tronWeb.defaultAddress.hex;
+        }
+
         if(utils.isFunction(duration)) {
             callback = duration;
             duration = 3;
@@ -133,18 +139,21 @@ export default class TransactionBuilder extends Promiseable {
             callback = resource;
             resource = "BANDWIDTH";
         }
-            
+
         if(!callback)
             return this.injectPromise(this.freezeBalance, arguments);
 
-        if(!this.tronWeb.isAddress(address))
-            return callback('Invalid address provided');
+        if(![ 'BANDWIDTH', 'ENERGY' ].includes(resource))
+            return callback('Invalid resource provided: Expected "BANDWIDTH" or "ENERGY"');
 
         if(!utils.isInteger(amount) || amount <= 0)
             return callback('Invalid amount provided');
 
         if(!utils.isInteger(duration) || duration < 3)
             return callback('Invalid duration provided, minimum of 3 days');
+
+        if(!this.tronWeb.isAddress(address))
+            return callback('Invalid address provided');
 
         this.tronWeb.fullNode.request('wallet/freezebalance', {
             owner_address: this.tronWeb.address.toHex(address),
@@ -159,7 +168,8 @@ export default class TransactionBuilder extends Promiseable {
         }).catch(err => callback(err));
     }
 
-    unfreezeBalance(address = this.tronWeb.defaultAddress.hex, resource = "BANDWIDTH", callback = false) {
+    unfreezeBalance(resource = "BANDWIDTH", address = this.tronWeb.defaultAddress.hex, callback = false)
+    {
         if(utils.isFunction(address)) {
             callback = address;
             address = this.tronWeb.defaultAddress.hex;
@@ -173,9 +183,12 @@ export default class TransactionBuilder extends Promiseable {
         if(!callback)
             return this.injectPromise(this.unfreezeBalance, arguments);
 
+        if(![ 'BANDWIDTH', 'ENERGY' ].includes(resource))
+            return callback('Invalid resource provided: Expected "BANDWIDTH" or "ENERGY"');
+
         if(!this.tronWeb.isAddress(address))
             return callback('Invalid address provided');
-        
+
         this.tronWeb.fullNode.request('wallet/unfreezebalance', {
             owner_address: this.tronWeb.address.toHex(address),
             resource: resource
@@ -620,7 +633,7 @@ export default class TransactionBuilder extends Promiseable {
         }
 
         this.tronWeb.fullNode.request('wallet/updateaccount', {
-            account_name: stringUtf8toHex(accountName),
+            account_name: this.tronWeb.fromUtf8(accountName),
             owner_address: this.tronWeb.address.toHex(address),
         }, 'post').then(transaction => {
 
