@@ -70,7 +70,7 @@ export default class Method {
         }
 
         if (!callback)
-            return this.injectPromise(this._call, types, args, options);
+            return this.injectPromise(this._call, arguments);
 
         if (types.length !== args.length)
             return callback('Invalid argument count provided');
@@ -132,7 +132,7 @@ export default class Method {
         }
 
         if (!callback)
-            return this.injectPromise(this._send, types, args, options, privateKey);
+            return this.injectPromise(this._send, arguments);
 
         if (types.length !== args.length)
             throw new Error('Invalid argument count provided');

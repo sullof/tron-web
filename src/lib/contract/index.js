@@ -164,7 +164,7 @@ export default class Contract {
         }
 
         if(!callback)
-            return this.injectPromise(this.new, options, privateKey);
+            return this.injectPromise(this.new, arguments);
 
         try {
             const address = this.tronWeb.address.fromPrivateKey(privateKey);
@@ -183,7 +183,7 @@ export default class Contract {
 
     async at(contractAddress, callback = false) {
         if(!callback)
-            return this.injectPromise(this.at, contractAddress);
+            return this.injectPromise(this.at, arguments);
 
         try {
             const contract = await this.tronWeb.trx.getContract(contractAddress);

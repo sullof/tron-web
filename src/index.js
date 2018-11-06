@@ -347,6 +347,8 @@ export default class TronWeb extends EventEmitter {
     }
 
     async isConnected(callback = false) {
+
+        console.log(typeof this.isConnected);
         if(!callback)
             return this.injectPromise(this.isConnected);
 

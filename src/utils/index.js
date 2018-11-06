@@ -78,7 +78,15 @@ const utils = {
     },
 
     promiseInjector(scope) {
-        return (func, ...args) => {
+        return (func) => {
+            let args = Array.prototype.slice.call(arguments).splice(1);
+            while (args.length) {
+                let lastArg = args[args.length - 1];
+                if (this.isFunction(lastArg))
+                    args.pop();
+                else
+                    break;
+            }
             return this.injectPromise(func.bind(scope), ...args);
         }
     },
